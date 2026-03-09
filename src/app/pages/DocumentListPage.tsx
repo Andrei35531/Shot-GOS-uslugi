@@ -25,6 +25,10 @@ const CARD_HEIGHT = 160;
 const CARDS_COUNT = 5;
 const PADDING_TOP = 16;
 const DRAG_THRESHOLD_PX = 5;
+const SMOOTH_SCROLL_DURATION_MS = 3000;
+function easeOutCubic(t: number): number {
+  return 1 - Math.pow(1 - t, 3);
+}
 const CARDS_TOTAL_HEIGHT = CARDS_COUNT * CARD_HEIGHT + CARDS_COUNT * CARD_GAP;
 const MAX_SCROLL_TOP =
   PADDING_TOP +
@@ -50,6 +54,10 @@ export function DocumentListPage() {
   const isPointerDownOnScroll = useRef(false);
   const rafId = useRef<number | null>(null);
   const pendingScrollTop = useRef<number | null>(null);
+  const smoothScrollTarget = useRef<number | null>(null);
+  const smoothScrollStart = useRef(0);
+  const smoothScrollStartTime = useRef(0);
+  const smoothRafId = useRef<number | null>(null);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -72,6 +80,36 @@ export function DocumentListPage() {
     if (!el || el.scrollTop <= MAX_SCROLL_TOP) return;
     el.scrollTop = MAX_SCROLL_TOP;
   }, []);
+
+  const runSmoothScroll = useCallback(() => {
+    const el = scrollRef.current;
+    const target = smoothScrollTarget.current;
+    if (!el || target === null) return;
+    const now = performance.now();
+    const elapsed = now - smoothScrollStartTime.current;
+    const t = Math.min(elapsed / SMOOTH_SCROLL_DURATION_MS, 1);
+    const eased = easeOutCubic(t);
+    const current = smoothScrollStart.current + (target - smoothScrollStart.current) * eased;
+    el.scrollTop = Math.round(current * 100) / 100;
+    if (t < 1) {
+      smoothRafId.current = requestAnimationFrame(runSmoothScroll);
+    } else {
+      smoothScrollTarget.current = null;
+      smoothRafId.current = null;
+    }
+  }, []);
+
+  const setSmoothScrollTarget = useCallback((target: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const clamped = Math.max(0, Math.min(MAX_SCROLL_TOP, target));
+    smoothScrollTarget.current = clamped;
+    smoothScrollStart.current = el.scrollTop;
+    smoothScrollStartTime.current = performance.now();
+    if (smoothRafId.current === null) {
+      smoothRafId.current = requestAnimationFrame(runSmoothScroll);
+    }
+  }, [runSmoothScroll]);
 
   const handlePointerDown = useCallback((e: React.MouseEvent) => {
     if (!scrollRef.current) return;
@@ -116,7 +154,7 @@ export function DocumentListPage() {
         rafId.current = null;
       }
       if (scrollRef.current && pendingScrollTop.current !== null) {
-        scrollRef.current.scrollTop = pendingScrollTop.current;
+        setSmoothScrollTarget(pendingScrollTop.current);
         pendingScrollTop.current = null;
       }
       // не сбрасываем hasCommittedDrag здесь — иначе после перетаскивания click откроет карточку
@@ -128,15 +166,24 @@ export function DocumentListPage() {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
     };
-  }, []);
+  }, [setSmoothScrollTarget]);
 
   const handlePointerUpOrLeave = useCallback(() => {
     isPointerDownOnScroll.current = false;
     setIsDragging(false);
   }, []);
 
-  // Не блокируем колёсико — нативный скролл работает
-  const handleWheel = useCallback(() => {}, []);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const target = el.scrollTop + e.deltaY;
+      setSmoothScrollTarget(target);
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [setSmoothScrollTarget]);
 
   const handleCardClick = useCallback(
     (title: string) => {
@@ -169,7 +216,6 @@ export function DocumentListPage() {
         onMouseDown={handlePointerDown}
         onMouseUp={handlePointerUpOrLeave}
         onMouseLeave={handlePointerUpOrLeave}
-        onWheel={handleWheel}
         onScroll={handleScroll}
       >
         <div
@@ -192,7 +238,7 @@ export function DocumentListPage() {
                 zIndex: index,
                 marginBottom: CARD_GAP,
                 minHeight: CARD_HEIGHT,
-                transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 2s cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: 'transform 3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 3s cubic-bezier(0.22, 1, 0.36, 1)',
                 ...(index === 0 ? { background: PASSPORT_RF_GRADIENT } : {}),
                 ...(index === 1 ? { background: INN_GRADIENT } : {}),
                 ...(index === 2 ? { background: OMSPOLICY_GRADIENT } : {}),

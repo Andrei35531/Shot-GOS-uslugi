@@ -32,7 +32,7 @@ export function MockupFrame({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#1a1a1a] box-border p-0">
+    <div className="min-h-screen w-full flex items-center justify-center bg-black box-border p-0">
       <div
         className="relative flex-shrink-0 overflow-visible"
         style={{
