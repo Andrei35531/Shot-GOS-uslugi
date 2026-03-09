@@ -249,10 +249,10 @@ export function DocumentDetailPage() {
                         aria-hidden
                         style={{
                           ...frontShimmerStyle,
-                          left: front.imageRect.left,
-                          top: front.imageRect.top,
-                          width: front.imageRect.width,
-                          height: front.imageRect.height,
+                          left: 8,
+                          top: 34,
+                          width: '400px',
+                          height: '265px',
                           zIndex: 1,
                           boxSizing: 'border-box',
                         }}
@@ -300,10 +300,10 @@ export function DocumentDetailPage() {
                         aria-hidden
                         style={{
                           ...backShimmerStyle,
-                          left: back.imageRect.left,
-                          top: back.imageRect.top,
-                          width: back.imageRect.width,
-                          height: back.imageRect.height,
+                          left: 8,
+                          top: 34,
+                          width: '400px',
+                          height: '265px',
                           zIndex: 1,
                           boxSizing: 'border-box',
                         }}
