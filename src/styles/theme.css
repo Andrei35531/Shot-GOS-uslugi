@@ -223,14 +223,14 @@
   border-radius: 0.75rem;
 }
 
-/* Радужный перелив в стиле React Bits Profile Card (sunpillar + holo-bg) */
+/* Радужный перелив — максимально заметно, яркие насыщенные цвета */
 .watermark-shimmer {
-  --sunpillar-1: hsl(2, 100%, 73%);
-  --sunpillar-2: hsl(53, 100%, 69%);
-  --sunpillar-3: hsl(93, 100%, 69%);
-  --sunpillar-4: hsl(176, 100%, 76%);
-  --sunpillar-5: hsl(228, 100%, 74%);
-  --sunpillar-6: hsl(283, 100%, 73%);
+  --sunpillar-1: hsl(0, 100%, 65%);
+  --sunpillar-2: hsl(45, 100%, 60%);
+  --sunpillar-3: hsl(100, 100%, 55%);
+  --sunpillar-4: hsl(180, 100%, 55%);
+  --sunpillar-5: hsl(240, 100%, 60%);
+  --sunpillar-6: hsl(290, 100%, 65%);
   opacity: 0;
   transition: opacity 0.25s ease-out;
   pointer-events: none;
@@ -248,9 +248,10 @@
 
 .watermark-shimmer.watermark-shimmer-active {
   opacity: 1;
-  animation: holo-bg 18s linear infinite;
+  animation: holo-bg 10s linear infinite;
 }
 
+/* Яркая радуга по маске — толстые полосы, максимум контраста */
 .watermark-shimmer.watermark-shimmer-active.watermark-shimmer-rainbow {
   background-image:
     repeating-linear-gradient(
@@ -265,28 +266,32 @@
     ),
     repeating-linear-gradient(
       var(--angle),
-      #0e152e 0%,
-      hsl(180, 10%, 60%) 3.8%,
-      hsl(180, 29%, 6%) 6%,
-      #0e152e 12%
+      rgba(255,255,255,0.4) 0%,
+      rgba(255,255,255,0.6) 5%,
+      rgba(255,255,255,0.4) 10%
     );
-  background-size: 300% 300%, 200% 200%;
+  background-size: 200% 200%, 160% 160%;
   background-position: var(--mouse-x, 50%) var(--mouse-y, 50%), 0% 0%;
-  mix-blend-mode: color-dodge;
+  mix-blend-mode: screen;
 }
 
-/* Перелив только по водяным знакам (машинки): маска по яркости изображения */
+/* Маска Frame 2131327833.svg — перелив максимально заметный */
 .watermark-shimmer-mask.watermark-shimmer-active.watermark-shimmer-rainbow {
   mask-image: var(--watermark-mask-url, none);
   mask-mode: luminance;
-  mask-size: cover;
-  mask-position: center;
+  mask-size: var(--mask-width, 100%) var(--mask-height, 100%);
+  mask-position: 0 0;
   mask-repeat: no-repeat;
+  mask-origin: border-box;
+  mask-clip: border-box;
   -webkit-mask-image: var(--watermark-mask-url, none);
   -webkit-mask-mode: luminance;
-  -webkit-mask-size: cover;
-  -webkit-mask-position: center;
+  -webkit-mask-size: var(--mask-width, 100%) var(--mask-height, 100%);
+  -webkit-mask-position: 0 0;
   -webkit-mask-repeat: no-repeat;
+  -webkit-mask-origin: border-box;
+  opacity: 1;
+  filter: brightness(1.7) contrast(1.6) saturate(1.4);
 }
 
 @keyframes holo-bg {

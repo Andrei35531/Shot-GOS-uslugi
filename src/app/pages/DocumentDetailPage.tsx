@@ -4,7 +4,7 @@ import { StatusBar } from '../components/StatusBar';
 import { MobileHeader } from '../components/MobileHeader';
 
 const IMAGE_FRONT = '/Group 3.svg';
-const IMAGE_BACK = '/Group 4.png';
+const IMAGE_BACK = '/Group 222.svg';
 const TILT_MAX = 12;
 const TILT_SENSITIVITY = 12;
 
@@ -151,11 +151,21 @@ export function DocumentDetailPage() {
         ['--mouse-y' as string]: `${pointerPos ? pointerPos.y : 50 + (tilt.x / TILT_MAX) * 45}%`,
       }
     : undefined;
-  /* Маска перелива только по водяным знакам (машинки — белые в Group 3.svg, luminance) */
+  /* Маска перелива только по водяным знакам; размер маски = габариты картинки (imageRect) */
   const frontShimmerStyle: React.CSSProperties | undefined = isInteracting
     ? {
         ...shimmerStyle,
-        ['--watermark-mask-url' as string]: `url("${import.meta.env.BASE_URL}Group 3.svg")`,
+        ['--watermark-mask-url' as string]: `url("${import.meta.env.BASE_URL}Frame%202131327833.svg")`,
+        ['--mask-width' as string]: `${front.imageRect.width}px`,
+        ['--mask-height' as string]: `${front.imageRect.height}px`,
+      }
+    : undefined;
+  const backShimmerStyle: React.CSSProperties | undefined = isInteracting
+    ? {
+        ...shimmerStyle,
+        ['--watermark-mask-url' as string]: `url("${import.meta.env.BASE_URL}Frame%202131327833.svg")`,
+        ['--mask-width' as string]: `${back.imageRect.width}px`,
+        ['--mask-height' as string]: `${back.imageRect.height}px`,
       }
     : undefined;
   const cardTiltStyle: React.CSSProperties = {
@@ -232,6 +242,7 @@ export function DocumentDetailPage() {
                         alignItems: 'center',
                       }}
                     />
+                    {/* Soft rainbow only inside existing watermark shapes (clipping mask); no new or duplicated icons */}
                     {front.imageRect.width > 0 && front.imageRect.height > 0 && (
                       <div
                         className={`absolute pointer-events-none watermark-shimmer watermark-shimmer-rainbow watermark-shimmer-mask watermark-shimmer-image-size ${isInteracting ? 'watermark-shimmer-active' : ''}`}
@@ -285,10 +296,10 @@ export function DocumentDetailPage() {
                     />
                     {back.imageRect.width > 0 && back.imageRect.height > 0 && (
                       <div
-                        className={`absolute pointer-events-none watermark-shimmer watermark-shimmer-rainbow watermark-shimmer-image-size ${isInteracting ? 'watermark-shimmer-active' : ''}`}
+                        className={`absolute pointer-events-none watermark-shimmer watermark-shimmer-rainbow watermark-shimmer-mask watermark-shimmer-image-size ${isInteracting ? 'watermark-shimmer-active' : ''}`}
                         aria-hidden
                         style={{
-                          ...shimmerStyle,
+                          ...backShimmerStyle,
                           left: back.imageRect.left,
                           top: back.imageRect.top,
                           width: back.imageRect.width,
