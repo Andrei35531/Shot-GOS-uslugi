@@ -196,3 +196,109 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Контейнер канваса по высоте картинки (пропорция 1.586) + паддинг 8px снаружи */
+.document-canvas-sheet {
+  min-height: 0;
+}
+
+/* Границы документа: водяные знаки только внутри фото (как у водительского удостоверения по пропорциям ~1.586) */
+.document-bounds {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 400px;
+}
+
+.document-bounds-inner {
+  position: relative;
+  width: calc(100% + 4px);
+  margin-left: -2px;
+  height: 300px;
+  max-width: none;
+  max-height: 100%;
+  aspect-ratio: 1.586;
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+/* Радужный перелив в стиле React Bits Profile Card (sunpillar + holo-bg) */
+.watermark-shimmer {
+  --sunpillar-1: hsl(2, 100%, 73%);
+  --sunpillar-2: hsl(53, 100%, 69%);
+  --sunpillar-3: hsl(93, 100%, 69%);
+  --sunpillar-4: hsl(176, 100%, 76%);
+  --sunpillar-5: hsl(228, 100%, 74%);
+  --sunpillar-6: hsl(283, 100%, 73%);
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+  pointer-events: none;
+  clip-path: inset(0 2px 0 2px round 0.75rem);
+  overflow: hidden;
+}
+
+/* Оверлей по размеру картинки 1:1 — поверх канваса, без обрезки по фрейму */
+.watermark-shimmer-image-size {
+  clip-path: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.watermark-shimmer.watermark-shimmer-active {
+  opacity: 1;
+  animation: holo-bg 18s linear infinite;
+}
+
+.watermark-shimmer.watermark-shimmer-active.watermark-shimmer-rainbow {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      var(--sunpillar-1) 0%,
+      var(--sunpillar-2) 16.67%,
+      var(--sunpillar-3) 33.33%,
+      var(--sunpillar-4) 50%,
+      var(--sunpillar-5) 66.67%,
+      var(--sunpillar-6) 83.33%,
+      var(--sunpillar-1) 100%
+    ),
+    repeating-linear-gradient(
+      var(--angle),
+      #0e152e 0%,
+      hsl(180, 10%, 60%) 3.8%,
+      hsl(180, 29%, 6%) 6%,
+      #0e152e 12%
+    );
+  background-size: 300% 300%, 200% 200%;
+  background-position: var(--mouse-x, 50%) var(--mouse-y, 50%), 0% 0%;
+  mix-blend-mode: color-dodge;
+}
+
+/* Перелив только по водяным знакам (машинки): маска по яркости изображения */
+.watermark-shimmer-mask.watermark-shimmer-active.watermark-shimmer-rainbow {
+  mask-image: var(--watermark-mask-url, none);
+  mask-mode: luminance;
+  mask-size: cover;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: var(--watermark-mask-url, none);
+  -webkit-mask-mode: luminance;
+  -webkit-mask-size: cover;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+}
+
+@keyframes holo-bg {
+  0% {
+    --angle: 0deg;
+  }
+  100% {
+    --angle: 360deg;
+  }
+}
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}

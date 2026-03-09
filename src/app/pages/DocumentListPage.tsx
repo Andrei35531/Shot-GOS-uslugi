@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Crown, Shield, FileText, CreditCard, IdCard, Heart, Award } from 'lucide-react';
+import { Crown, Shield, CreditCard, Heart, Award } from 'lucide-react';
 import { motion } from 'motion/react';
 import { DocumentCard } from '../components/DocumentCard';
 import { LightRays } from '../components/LightRays';
@@ -8,16 +8,20 @@ import { MobileHeader } from '../components/MobileHeader';
 import { StatusBar } from '../components/StatusBar';
 
 const PASSPORT_RF_GRADIENT =
-  'linear-gradient(242.32deg, #6473E6 16.55%, #394AB1 45.28%, #181164 95.19%)';
-const INN_GRADIENT =
   'linear-gradient(244.92deg, #ED4A4A 4.86%, #B51C2E 39.31%, #760F1B 95.56%)';
-const BIRTH_CERT_GRADIENT =
+const INN_GRADIENT =
+  'linear-gradient(243.06deg, #F89832 8.72%, #E07517 40.21%, #D94613 94.91%)';
+const OMSPOLICY_GRADIENT =
   'linear-gradient(242.32deg, #578DF1 16.55%, #2F71E9 45.28%, #023881 95.19%)';
+const SNILS_GRADIENT =
+  'linear-gradient(243.06deg, #6AEB93 8.72%, #19B65D 40.21%, #15764C 94.91%)';
+const VU_GRADIENT =
+  'linear-gradient(242.32deg, #6473E6 16.55%, #394AB1 45.28%, #181164 95.19%)';
 
 const PEEK_PX = 28;
 const CARD_GAP = 4;
 const CARD_HEIGHT = 160;
-const CARDS_COUNT = 7;
+const CARDS_COUNT = 5;
 const PADDING_TOP = 16;
 const DRAG_THRESHOLD_PX = 5;
 const CARDS_TOTAL_HEIGHT = CARDS_COUNT * CARD_HEIGHT + CARDS_COUNT * CARD_GAP;
@@ -29,9 +33,7 @@ const MAX_SCROLL_TOP =
 const DOCUMENTS = [
   { title: 'Паспорт РФ', number: '8824 232487', gradient: 'bg-gradient-to-br from-red-600 via-red-500 to-pink-500', Icon: Crown },
   { title: 'ИНН', number: '7707083893', gradient: 'bg-gradient-to-br from-orange-600 via-amber-500 to-yellow-500', Icon: Shield },
-  { title: 'Свидетельство о рождении', number: 'IV-АБ 123456', gradient: 'bg-gradient-to-br from-yellow-500 via-lime-400 to-emerald-500', Icon: FileText },
   { title: 'Полис ОМС', number: '120912308923148274', gradient: 'bg-gradient-to-br from-emerald-600 via-green-500 to-teal-500', Icon: CreditCard },
-  { title: 'Загранпаспорт', number: '72 1234567', gradient: 'bg-gradient-to-br from-cyan-600 via-blue-500 to-blue-600', Icon: IdCard },
   { title: 'СНИЛС', number: '123-456-789 00', gradient: 'bg-gradient-to-br from-indigo-600 via-violet-500 to-purple-500', Icon: Heart },
   { title: 'Водительское удостоверение', number: '99 12 345678', gradient: 'bg-gradient-to-br from-violet-600 via-purple-500 to-fuchsia-500', Icon: Award },
 ];
@@ -45,6 +47,8 @@ export function DocumentListPage() {
   const startScrollTop = useRef(0);
   const hasCommittedDrag = useRef(false);
   const isPointerDownOnScroll = useRef(false);
+  const rafId = useRef<number | null>(null);
+  const pendingScrollTop = useRef<number | null>(null);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -91,17 +95,35 @@ export function DocumentListPage() {
         let next = startScrollTop.current + dy;
         if (next > MAX_SCROLL_TOP) next = MAX_SCROLL_TOP;
         if (next < 0) next = 0;
-        scrollRef.current.scrollTop = next;
+        pendingScrollTop.current = next;
+        if (rafId.current === null) {
+          rafId.current = requestAnimationFrame(() => {
+            rafId.current = null;
+            if (scrollRef.current && pendingScrollTop.current !== null) {
+              scrollRef.current.scrollTop = pendingScrollTop.current;
+              pendingScrollTop.current = null;
+            }
+          });
+        }
       }
     };
     const onUp = () => {
       isPointerDownOnScroll.current = false;
       setIsDragging(false);
+      if (rafId.current !== null) {
+        cancelAnimationFrame(rafId.current);
+        rafId.current = null;
+      }
+      if (scrollRef.current && pendingScrollTop.current !== null) {
+        scrollRef.current.scrollTop = pendingScrollTop.current;
+        pendingScrollTop.current = null;
+      }
       // не сбрасываем hasCommittedDrag здесь — иначе после перетаскивания click откроет карточку
     };
     window.addEventListener('mousemove', onMove, { passive: false });
     window.addEventListener('mouseup', onUp);
     return () => {
+      if (rafId.current !== null) cancelAnimationFrame(rafId.current);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
     };
@@ -162,22 +184,23 @@ export function DocumentListPage() {
               role="button"
               tabIndex={0}
               data-document-card
-              className={`relative transition-all duration-300 ease-out overflow-hidden rounded-[24px] cursor-pointer ${[0, 1, 2].includes(index) ? '' : doc.gradient}`}
+              className={`relative overflow-hidden rounded-[24px] cursor-pointer ${[0, 1, 2, 4].includes(index) ? '' : doc.gradient}`}
               style={{
                 position: 'sticky',
                 top: index * PEEK_PX,
                 zIndex: index,
                 marginBottom: CARD_GAP,
                 minHeight: CARD_HEIGHT,
-                transition: 'box-shadow 0.3s ease-out, transform 0.3s ease-out',
+                transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 2s cubic-bezier(0.16, 1, 0.3, 1)',
                 ...(index === 0 ? { background: PASSPORT_RF_GRADIENT } : {}),
                 ...(index === 1 ? { background: INN_GRADIENT } : {}),
-                ...(index === 2 ? { background: BIRTH_CERT_GRADIENT } : {}),
+                ...(index === 2 ? { background: OMSPOLICY_GRADIENT } : {}),
+                ...(index === 4 ? { background: VU_GRADIENT } : {}),
               }}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               onClick={() => handleCardClick(doc.title)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -190,8 +213,52 @@ export function DocumentListPage() {
                 title={doc.title}
                 number={doc.number}
                 gradient={doc.gradient}
-                backgroundStyle={index === 0 ? { background: PASSPORT_RF_GRADIENT } : index === 1 ? { background: INN_GRADIENT } : index === 2 ? { background: BIRTH_CERT_GRADIENT } : undefined}
-                icon={<doc.Icon className="w-10 h-10 text-white" strokeWidth={2.5} />}
+                backgroundStyle={
+                  index === 0
+                    ? { background: PASSPORT_RF_GRADIENT }
+                    : index === 1
+                      ? { background: INN_GRADIENT }
+                      : index === 2
+                        ? { background: OMSPOLICY_GRADIENT }
+                        : index === 3
+                          ? { background: SNILS_GRADIENT }
+                          : index === 4
+                            ? { background: VU_GRADIENT }
+                            : undefined
+                }
+                icon={index === 0 ? (
+                  <img
+                    src={`${import.meta.env.BASE_URL}Orel.svg`}
+                    alt=""
+                    className="w-10 h-10 object-contain"
+                  />
+                ) : index === 1 ? (
+                  <img
+                    src={`${import.meta.env.BASE_URL}fa7-solid_folder.svg`}
+                    alt=""
+                    className="w-10 h-10 object-contain"
+                  />
+                ) : index === 2 ? (
+                  <img
+                    src={`${import.meta.env.BASE_URL}Union.svg`}
+                    alt=""
+                    className="w-10 h-10 object-contain"
+                  />
+                ) : index === 3 ? (
+                  <img
+                    src={`${import.meta.env.BASE_URL}Shield.svg`}
+                    alt=""
+                    className="w-10 h-10 object-contain"
+                  />
+                ) : index === 4 ? (
+                  <img
+                    src={`${import.meta.env.BASE_URL}mingcute_car-3-fill.svg`}
+                    alt=""
+                    className="w-10 h-10 object-contain"
+                  />
+                ) : (
+                  <doc.Icon className="w-10 h-10 text-white" strokeWidth={2.5} />
+                )}
               />
             </motion.div>
           ))}

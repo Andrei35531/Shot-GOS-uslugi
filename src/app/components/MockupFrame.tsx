@@ -32,11 +32,11 @@ export function MockupFrame({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#1a1a1a] p-6 box-border">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#1a1a1a] box-border p-0">
       <div
         className="relative flex-shrink-0 overflow-visible"
         style={{
-          width: 'min(380px, calc(100vw - 3rem), calc((100vh - 3rem) * 390 / 844))',
+          width: 'min(380px, 100vw, calc(100vh * 390 / 844))',
           aspectRatio: '390 / 844',
         }}
       >
@@ -46,9 +46,9 @@ export function MockupFrame({ children }: { children: React.ReactNode }) {
           className="absolute overflow-hidden bg-black flex items-center justify-center z-0"
           style={{
             left: `calc(${SCREEN_LEFT}% - 1px)`,
-            top: `calc(${SCREEN_TOP}% - 26px)`,
+            top: `calc(${SCREEN_TOP}% - 28px)`,
             width: `calc(${SCREEN_WIDTH}% + 2px)`,
-            height: `calc(${SCREEN_HEIGHT}% + 28px)`,
+            height: `calc(${SCREEN_HEIGHT}% + 30px)`,
             borderRadius: SCREEN_RADIUS,
           }}
         >
