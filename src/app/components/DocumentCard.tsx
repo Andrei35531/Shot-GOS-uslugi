@@ -15,7 +15,7 @@ export function DocumentCard({ title, number, icon, gradient, backgroundStyle }:
       {/* Content — типографика как в Госуслугах: Golos Text, 16px, medium, line-height 1.25 */}
       <div className="relative z-10" style={{ fontFamily: "'Golos Text', sans-serif" }}>
         <h3 className="text-white text-[18px] font-medium leading-[1.25] mb-2">{title}</h3>
-        <p className="text-white/90 text-base tracking-wide">{number}</p>
+        <p className="text-white text-base tracking-wide" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.25)' }}>{number}</p>
       </div>
       
       {/* Круглая подложка под иконку (на 40% больше основного круга, по центру) */}

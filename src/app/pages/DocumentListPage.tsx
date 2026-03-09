@@ -18,7 +18,8 @@ const SNILS_GRADIENT =
 const VU_GRADIENT =
   'linear-gradient(242.32deg, #6473E6 16.55%, #394AB1 45.28%, #181164 95.19%)';
 
-const PEEK_PX = 28;
+/* Высота видимой полоски предыдущей карточки в стаке — заголовок + подзаголовок с запасом для читаемости */
+const PEEK_PX = 88;
 const CARD_GAP = 4;
 const CARD_HEIGHT = 160;
 const CARDS_COUNT = 5;
