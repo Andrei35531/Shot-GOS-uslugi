@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { Crown, Shield, FileText, CreditCard, IdCard, Heart, Award } from 'lucide-react';
 import { motion } from 'motion/react';
 import { DocumentCard } from '../components/DocumentCard';
+import { LightRays } from '../components/LightRays';
 import { MobileHeader } from '../components/MobileHeader';
 import { StatusBar } from '../components/StatusBar';
 
@@ -117,9 +118,10 @@ export function DocumentListPage() {
 
   return (
     <div
-      className="relative w-full h-full min-h-0 flex flex-col overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-black box-border"
+      className="relative w-full h-full min-h-0 flex flex-col overflow-hidden bg-black box-border"
       style={{ width: '100%', height: '100%', maxWidth: 412 }}
     >
+      <LightRays color="rgba(80, 150, 255, 0.22)" length="80vh" />
       <StatusBar />
       <MobileHeader
         title="Документы"

@@ -17,7 +17,7 @@ export function MobileHeader({ title, onBack, onMenu }: MobileHeaderProps) {
         <ChevronLeft className="w-6 h-6 text-white" />
       </button>
       
-      <h1 className="text-white text-lg font-medium">{title}</h1>
+      <h1 className="text-white text-2xl font-medium text-center">{title}</h1>
       
       <button 
         onClick={onMenu}

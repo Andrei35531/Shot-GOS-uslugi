@@ -134,6 +134,7 @@ export function DocumentDetailPage() {
   const { title } = useParams<{ title: string }>();
   const navigate = useNavigate();
   const decodedTitle = title ? decodeURIComponent(title) : 'Документ';
+  const headerTitle = decodedTitle === 'Водительское удостоверение' ? 'ВУ' : decodedTitle;
 
   const {
     canvasRef,
@@ -146,12 +147,12 @@ export function DocumentDetailPage() {
 
   return (
     <div
-      className="relative w-full h-full min-h-0 flex flex-col overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-black box-border"
+      className="relative w-full h-full min-h-0 flex flex-col overflow-hidden bg-black box-border"
       style={{ width: '100%', height: '100%', maxWidth: 412 }}
     >
       <StatusBar />
       <MobileHeader
-        title={decodedTitle}
+        title={headerTitle}
         onBack={() => navigate(-1)}
         onMenu={() => {}}
       />
@@ -172,6 +173,7 @@ export function DocumentDetailPage() {
           />
         </div>
       </div>
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/30 rounded-full" />
     </div>
   );
 }
