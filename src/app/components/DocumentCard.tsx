@@ -5,18 +5,11 @@ interface DocumentCardProps {
   gradient: string;
 }
 
-const CARD_RADIUS_PX = 24;
-const CORNER_SMOOTHING = 0.6; // 60% — эллиптические углы (smoother corners)
-
 export function DocumentCard({ title, number, icon, gradient }: DocumentCardProps) {
-  const radiusVertical = CARD_RADIUS_PX * CORNER_SMOOTHING;
   return (
     <div 
-      className={`relative overflow-hidden p-6 ${gradient} shadow-lg`}
-      style={{
-        minHeight: '160px',
-        borderRadius: `${CARD_RADIUS_PX}px / ${radiusVertical}px`,
-      }}
+      className={`relative overflow-hidden rounded-[24px] p-6 max-w-full box-border ${gradient} shadow-lg`}
+      style={{ minHeight: '160px' }}
     >
       {/* Content */}
       <div className="relative z-10">

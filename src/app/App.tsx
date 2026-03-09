@@ -6,7 +6,7 @@ import { MobileHeader } from './components/MobileHeader';
 import { StatusBar } from './components/StatusBar';
 
 const PEEK_PX = 28;
-const CARD_GAP = 24;
+const CARD_GAP = 4;
 const CARD_HEIGHT = 160;
 const CARDS_COUNT = 7;
 // Чтобы последняя карточка стояла на top: (n-1)*PEEK_PX как остальные, maxScrollTop не должен превышать эту величину:
@@ -90,8 +90,8 @@ export default function App() {
 
   return (
     <div 
-      className="relative w-full h-full min-h-0 flex flex-col overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-black"
-      style={{ width: 412 }}
+      className="relative w-full h-full min-h-0 flex flex-col overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-black box-border"
+      style={{ width: '100%', height: '100%', maxWidth: 412 }}
     >
       {/* Status Bar */}
       <StatusBar />
@@ -106,7 +106,7 @@ export default function App() {
       {/* Карточки друг под другом; при скролле вниз по очереди образуют стак (sticky) */}
       <div
         ref={scrollRef}
-        className="scrollbar-hide flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain px-4 py-6 touch-pan-y select-none"
+        className="scrollbar-hide flex flex-col flex-1 min-h-0 min-w-0 w-full overflow-y-auto overflow-x-hidden overscroll-contain px-0 touch-pan-y select-none"
         style={{
           WebkitOverflowScrolling: 'touch',
           cursor: isDragging ? 'grabbing' : 'grab',
@@ -118,7 +118,7 @@ export default function App() {
         onScroll={handleScroll}
       >
         <div
-          className="relative"
+          className="relative min-w-0 max-w-full"
           style={{
             // Нижний отступ по высоте контейнера: последняя карточка не «отлипает» и остаётся на top как остальные
             paddingBottom: bottomPadding,
