@@ -329,7 +329,8 @@ export function DocumentDetailPage() {
       <MobileHeader
         title={headerTitle}
         onBack={() => navigate(-1)}
-        onMenu={() => {}}
+        onMenu={() => { if (isVU) setIsFlipped((v) => !v); }}
+        menuIconSrc={`${import.meta.env.BASE_URL || '/'}mynaui_refresh.svg`}
       />
       {renderCanvasArea()}
       <div className="flex-1 min-h-0 overflow-y-auto py-0 flex flex-col min-w-0" />
