@@ -151,21 +151,22 @@ export function DocumentDetailPage() {
         ['--mouse-y' as string]: `${pointerPos ? pointerPos.y : 50 + (tilt.x / TILT_MAX) * 45}%`,
       }
     : undefined;
-  /* Маска перелива только по водяным знакам; размер маски = габариты картинки (imageRect) */
+  /* Маска перелива только по водяным знакам; размер маски = габариты картинки × 1.3 */
+  const SHIMMER_SCALE = 1.3;
   const frontShimmerStyle: React.CSSProperties | undefined = isInteracting
     ? {
         ...shimmerStyle,
         ['--watermark-mask-url' as string]: `url("${import.meta.env.BASE_URL}Frame%202131327833.svg")`,
-        ['--mask-width' as string]: `${front.imageRect.width}px`,
-        ['--mask-height' as string]: `${front.imageRect.height}px`,
+        ['--mask-width' as string]: `${front.imageRect.width * SHIMMER_SCALE}px`,
+        ['--mask-height' as string]: `${front.imageRect.height * SHIMMER_SCALE}px`,
       }
     : undefined;
   const backShimmerStyle: React.CSSProperties | undefined = isInteracting
     ? {
         ...shimmerStyle,
         ['--watermark-mask-url' as string]: `url("${import.meta.env.BASE_URL}Frame%202131327833.svg")`,
-        ['--mask-width' as string]: `${back.imageRect.width}px`,
-        ['--mask-height' as string]: `${back.imageRect.height}px`,
+        ['--mask-width' as string]: `${back.imageRect.width * SHIMMER_SCALE}px`,
+        ['--mask-height' as string]: `${back.imageRect.height * SHIMMER_SCALE}px`,
       }
     : undefined;
   const cardTiltStyle: React.CSSProperties = {
@@ -251,8 +252,8 @@ export function DocumentDetailPage() {
                           ...frontShimmerStyle,
                           left: 8,
                           top: 34,
-                          width: '400px',
-                          height: '265px',
+                          width: '520px',
+                          height: '345px',
                           zIndex: 1,
                           boxSizing: 'border-box',
                         }}
@@ -302,19 +303,19 @@ export function DocumentDetailPage() {
                           ...backShimmerStyle,
                           left: 8,
                           top: 34,
-                          width: '400px',
-                          height: '265px',
+                          width: '520px',
+                          height: '345px',
                           zIndex: 1,
                           boxSizing: 'border-box',
                         }}
                       />
                     )}
-                  </div>
                 </div>
+              </div>
             </div>
           </div>
-          </div>
         </div>
+      </div>
       {/* fix esbuild JSX parse */}
       </div>
     );
