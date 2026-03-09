@@ -9,9 +9,13 @@ const PEEK_PX = 28;
 const CARD_GAP = 4;
 const CARD_HEIGHT = 160;
 const CARDS_COUNT = 7;
-// Чтобы последняя карточка стояла на top: (n-1)*PEEK_PX как остальные, maxScrollTop не должен превышать эту величину:
-const LAST_CARD_STICK_SCROLL = (CARDS_COUNT - 1) * (CARD_HEIGHT + CARD_GAP) - (CARDS_COUNT - 1) * PEEK_PX;
+const PADDING_TOP = 16;
 const CARDS_TOTAL_HEIGHT = CARDS_COUNT * CARD_HEIGHT + CARDS_COUNT * CARD_GAP;
+// Макс. прокрутка: при таком scrollTop последняя карточка прилипает ровно на top (n-1)*PEEK_PX, как остальные (учёт paddingTop).
+const MAX_SCROLL_TOP =
+  PADDING_TOP +
+  (CARDS_COUNT - 1) * (CARD_HEIGHT + CARD_GAP) -
+  (CARDS_COUNT - 1) * PEEK_PX;
 
 const DOCUMENTS = [
   { title: 'Паспорт РФ', number: '8824 232487', gradient: 'bg-gradient-to-br from-red-600 via-red-500 to-pink-500', Icon: Crown },
@@ -30,14 +34,16 @@ export default function App() {
   const startY = useRef(0);
   const startScrollTop = useRef(0);
 
-  // Нижний отступ так, чтобы maxScrollTop позволял последней карточке стоять на top: (n-1)*PEEK_PX
+  // Нижний отступ так, чтобы при scrollTop = MAX_SCROLL_TOP последняя карточка стояла на top (n-1)*PEEK_PX
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     const update = () => {
       const viewportH = el.clientHeight;
       if (viewportH < 150) return;
-      setBottomPadding(Math.max(120, LAST_CARD_STICK_SCROLL + viewportH - CARDS_TOTAL_HEIGHT));
+      setBottomPadding(
+        Math.max(120, MAX_SCROLL_TOP + viewportH - PADDING_TOP - CARDS_TOTAL_HEIGHT)
+      );
     };
     update();
     const ro = new ResizeObserver(update);
@@ -45,8 +51,7 @@ export default function App() {
     return () => ro.disconnect();
   }, []);
 
-  // Макс. прокрутка = 936: последняя карточка тогда ровно на top 168px, как на скрине (6 полосок по 28px)
-  const maxScrollTop = LAST_CARD_STICK_SCROLL;
+  const maxScrollTop = MAX_SCROLL_TOP;
   // Ограничиваем scrollTop, чтобы финал скролла совпадал со скрином
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
@@ -120,19 +125,20 @@ export default function App() {
         <div
           className="relative min-w-0 max-w-full"
           style={{
-            // Нижний отступ по высоте контейнера: последняя карточка не «отлипает» и остаётся на top как остальные
+            paddingTop: PADDING_TOP,
             paddingBottom: bottomPadding,
           }}
         >
           {DOCUMENTS.map((doc, index) => (
             <motion.div
               key={doc.title}
-              className="relative transition-shadow duration-200"
+              className={`relative transition-shadow duration-200 overflow-hidden rounded-[24px] ${doc.gradient}`}
               style={{
                 position: 'sticky',
                 top: index * PEEK_PX,
                 zIndex: index,
                 marginBottom: CARD_GAP,
+                minHeight: CARD_HEIGHT,
               }}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
