@@ -13,7 +13,7 @@ export function DocumentCard({ title, number, icon, gradient }: DocumentCardProp
     >
       {/* Content */}
       <div className="relative z-10">
-        <h3 className="text-white text-xl font-semibold mb-2">{title}</h3>
+        <h3 className="text-white text-[21px] font-semibold mb-2">{title}</h3>
         <p className="text-white/90 text-lg tracking-wide">{number}</p>
       </div>
       
