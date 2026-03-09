@@ -7,6 +7,13 @@ import { LightRays } from '../components/LightRays';
 import { MobileHeader } from '../components/MobileHeader';
 import { StatusBar } from '../components/StatusBar';
 
+const PASSPORT_RF_GRADIENT =
+  'linear-gradient(242.32deg, #6473E6 16.55%, #394AB1 45.28%, #181164 95.19%)';
+const INN_GRADIENT =
+  'linear-gradient(244.92deg, #ED4A4A 4.86%, #B51C2E 39.31%, #760F1B 95.56%)';
+const BIRTH_CERT_GRADIENT =
+  'linear-gradient(242.32deg, #578DF1 16.55%, #2F71E9 45.28%, #023881 95.19%)';
+
 const PEEK_PX = 28;
 const CARD_GAP = 4;
 const CARD_HEIGHT = 160;
@@ -133,6 +140,7 @@ export function DocumentListPage() {
         className="scrollbar-hide flex flex-col flex-1 min-h-0 min-w-0 w-full overflow-y-auto overflow-x-hidden overscroll-contain px-0 touch-pan-y select-none"
         style={{
           WebkitOverflowScrolling: 'touch',
+          scrollBehavior: 'smooth',
           cursor: isDragging ? 'grabbing' : 'grab',
         }}
         onMouseDown={handlePointerDown}
@@ -154,18 +162,22 @@ export function DocumentListPage() {
               role="button"
               tabIndex={0}
               data-document-card
-              className={`relative transition-shadow duration-200 overflow-hidden rounded-[24px] cursor-pointer ${doc.gradient}`}
+              className={`relative transition-all duration-300 ease-out overflow-hidden rounded-[24px] cursor-pointer ${[0, 1, 2].includes(index) ? '' : doc.gradient}`}
               style={{
                 position: 'sticky',
                 top: index * PEEK_PX,
                 zIndex: index,
                 marginBottom: CARD_GAP,
                 minHeight: CARD_HEIGHT,
+                transition: 'box-shadow 0.3s ease-out, transform 0.3s ease-out',
+                ...(index === 0 ? { background: PASSPORT_RF_GRADIENT } : {}),
+                ...(index === 1 ? { background: INN_GRADIENT } : {}),
+                ...(index === 2 ? { background: BIRTH_CERT_GRADIENT } : {}),
               }}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
               onClick={() => handleCardClick(doc.title)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -178,6 +190,7 @@ export function DocumentListPage() {
                 title={doc.title}
                 number={doc.number}
                 gradient={doc.gradient}
+                backgroundStyle={index === 0 ? { background: PASSPORT_RF_GRADIENT } : index === 1 ? { background: INN_GRADIENT } : index === 2 ? { background: BIRTH_CERT_GRADIENT } : undefined}
                 icon={<doc.Icon className="w-10 h-10 text-white" strokeWidth={2.5} />}
               />
             </motion.div>

@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 
 const MOBILE_VIEWPORT_WIDTH = 412;
 
-/** Область чёрного экрана телефона в макете — интерфейс строго внутри (%) */
-const SCREEN_LEFT = 5.5;
-const SCREEN_TOP = 5.5;
-const SCREEN_WIDTH = 89;
-const SCREEN_HEIGHT = 89;
+/** Область чёрного экрана в мокапе — вверху оставляем место под островок (Dynamic Island) */
+const SCREEN_LEFT = 5.8;
+const SCREEN_TOP = 9.2;
+const SCREEN_WIDTH = 88.4;
+const SCREEN_HEIGHT = 85.5;
 const SCREEN_RADIUS = '24px';
 
 export function MockupFrame({ children }: { children: React.ReactNode }) {
@@ -40,21 +40,15 @@ export function MockupFrame({ children }: { children: React.ReactNode }) {
           aspectRatio: '390 / 844',
         }}
       >
-        <img
-          src={`${import.meta.env.BASE_URL}Mockup%202.png`}
-          alt=""
-          className="absolute inset-0 w-full h-full object-contain object-center pointer-events-none select-none rounded-[40px]"
-          draggable={false}
-        />
-        {/* Чёрный экран телефона — интерфейс только внутри */}
+        {/* Фрейм с контентом — под мокапом, виден через прозрачную область экрана в Bezel.png */}
         <div
           ref={overlayRef}
-          className="absolute overflow-hidden bg-black flex items-center justify-center"
+          className="absolute overflow-hidden bg-black flex items-center justify-center z-0"
           style={{
-            left: `${SCREEN_LEFT}%`,
-            top: `${SCREEN_TOP}%`,
-            width: `${SCREEN_WIDTH}%`,
-            height: `calc(${SCREEN_HEIGHT}% + 4px)`,
+            left: `calc(${SCREEN_LEFT}% - 1px)`,
+            top: `calc(${SCREEN_TOP}% - 26px)`,
+            width: `calc(${SCREEN_WIDTH}% + 2px)`,
+            height: `calc(${SCREEN_HEIGHT}% + 28px)`,
             borderRadius: SCREEN_RADIUS,
           }}
         >
@@ -71,6 +65,13 @@ export function MockupFrame({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </div>
+        {/* Мокап поверх — главный слой, рамка и островок перекрывают фрейм */}
+        <img
+          src={`${import.meta.env.BASE_URL}Bezel.png`}
+          alt=""
+          className="absolute inset-0 w-full h-full object-contain object-center pointer-events-none select-none rounded-[48px] z-10"
+          draggable={false}
+        />
       </div>
     </div>
   );
