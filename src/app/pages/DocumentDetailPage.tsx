@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import { StatusBar } from '../components/StatusBar';
 import { MobileHeader } from '../components/MobileHeader';
 
-const IMAGE_FRONT = '/Group 3.svg';
+const IMAGE_FRONT = '/Group 3 (1).svg';
 const IMAGE_BACK = '/Group 222.svg';
 const TILT_MAX = 12;
 const TILT_SENSITIVITY = 12;
