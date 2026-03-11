@@ -4,11 +4,13 @@ interface MobileHeaderProps {
   title: string;
   onBack?: () => void;
   onMenu?: () => void;
+  /** Вызов при touchend на кнопке меню (для запроса разрешений на iOS в контексте жеста). */
+  onMenuTouchEnd?: () => void;
   /** Иконка меню (справа). Если задан путь к SVG — показывается он (например, только внутри карточки). */
   menuIconSrc?: string;
 }
 
-export function MobileHeader({ title, onBack, onMenu, menuIconSrc }: MobileHeaderProps) {
+export function MobileHeader({ title, onBack, onMenu, onMenuTouchEnd, menuIconSrc }: MobileHeaderProps) {
   return (
     <header className="flex-shrink-0 flex items-center justify-between px-4 py-4">
       <button 
@@ -22,7 +24,9 @@ export function MobileHeader({ title, onBack, onMenu, menuIconSrc }: MobileHeade
       <h1 className="text-white text-lg font-medium text-center leading-6" style={{ fontFamily: "'Golos Text', sans-serif", fontSize: '17px' }}>{title}</h1>
       
       <button 
+        type="button"
         onClick={onMenu}
+        onTouchEnd={onMenuTouchEnd}
         className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/5 transition-colors"
         aria-label="Menu"
       >

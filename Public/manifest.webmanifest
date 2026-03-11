@@ -1,0 +1,9 @@
+{
+  "name": "Документы",
+  "short_name": "Документы",
+  "display": "standalone",
+  "start_url": "/",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait"
+}

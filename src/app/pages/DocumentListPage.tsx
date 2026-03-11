@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router';
 import { Crown, Shield, CreditCard, Heart, Award } from 'lucide-react';
 import { motion } from 'motion/react';
 import { DocumentCard } from '../components/DocumentCard';
-import { LightRays } from '../components/LightRays';
 import { MobileHeader } from '../components/MobileHeader';
-import { StatusBar } from '../components/StatusBar';
+import { IPHONE_17_AIR_VIEWPORT_WIDTH } from '../constants/viewport';
 
 const PASSPORT_RF_GRADIENT =
   'linear-gradient(244.92deg, #ED4A4A 4.86%, #B51C2E 39.31%, #760F1B 95.56%)';
@@ -196,10 +195,8 @@ export function DocumentListPage() {
   return (
     <div
       className="relative w-full h-full min-h-0 flex flex-col overflow-hidden bg-black box-border"
-      style={{ width: '100%', height: '100%', maxWidth: 412 }}
+      style={{ width: '100%', height: '100%', maxWidth: IPHONE_17_AIR_VIEWPORT_WIDTH, margin: '0 auto' }}
     >
-      <LightRays color="rgba(80, 150, 255, 0.22)" length="80vh" />
-      <StatusBar />
       <MobileHeader
         title="Документы"
         onBack={() => {}}
@@ -311,7 +308,6 @@ export function DocumentListPage() {
           ))}
         </div>
       </div>
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/30 rounded-full" />
     </div>
   );
 }

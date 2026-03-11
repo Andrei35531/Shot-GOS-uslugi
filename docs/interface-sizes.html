@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Размеры интерфейса</title>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Golos Text', sans-serif; font-size: 14px; line-height: 1.5; padding: 24px; max-width: 800px; margin: 0 auto; color: #1a1a1a; }
+    h1 { font-size: 24px; margin-top: 0; border-bottom: 2px solid #333; padding-bottom: 8px; }
+    h2 { font-size: 20px; margin-top: 24px; }
+    h3 { font-size: 16px; margin-top: 16px; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    th, td { border: 1px solid #ccc; padding: 8px 10px; text-align: left; }
+    th { background: #f0f0f0; font-weight: 600; }
+    hr { border: none; border-top: 1px solid #ddd; margin: 20px 0; }
+    p { margin: 8px 0; }
+    p.note { color: #555; font-style: italic; }
+    @media print { body { padding: 16px; } }
+  </style>
+</head>
+<body>
+<h1>Размеры интерфейса (шрифты, отступы, карточки)</h1>
+<br/>
+<h2>Базовые настройки</h2>
+<br/>
+<table><thead><tr><th>Переменная</th><th>Значение</th><th>Где используется</th></tr></thead><tbody><tr><td>`--font-size`</td><td>16px</td><td>База в `:root` (theme.css)</td></tr><tr><td>Шрифт интерфейса</td><td>**Golos Text**</td><td>DocumentCard, MobileHeader</td></tr></tbody></table>
+<br/>
+<hr/>
+<br/>
+<h2>Шрифты</h2>
+<br/>
+<table><thead><tr><th>Элемент</th><th>Размер</th><th>Начертание</th><th>Межстрочный интервал</th><th>Файл/компонент</th></tr></thead><tbody><tr><td>Заголовок страницы (h1 в хедере)</td><td>**17px**</td><td>medium (500)</td><td>1.5 (leading-6)</td><td>MobileHeader.tsx</td></tr><tr><td>Заголовок карточки документа</td><td>**18px**</td><td>medium (500)</td><td>1.25</td><td>DocumentCard.tsx</td></tr><tr><td>Номер документа (подзаголовок)</td><td>**16px** (text-base)</td><td>normal (400)</td><td>по умолчанию</td><td>DocumentCard.tsx</td></tr><tr><td>Базовые h1 (глобально)</td><td>var(--text-2xl)</td><td>medium</td><td>1.5</td><td>theme.css</td></tr><tr><td>Базовые h2</td><td>var(--text-xl)</td><td>medium</td><td>1.5</td><td>theme.css</td></tr><tr><td>Базовые h3</td><td>var(--text-lg)</td><td>medium</td><td>1.5</td><td>theme.css</td></tr><tr><td>Базовые h4, label, button, input</td><td>var(--text-base)</td><td>medium / normal</td><td>1.5</td><td>theme.css</td></tr></tbody></table>
+<br/>
+<p class="note">Tailwind по умолчанию: text-base=16px, text-lg=18px, text-xl=20px, text-2xl=24px.</p>
+<br/>
+<hr/>
+<br/>
+<h2>Отступы</h2>
+<br/>
+<h3>Список документов (DocumentListPage)</h3>
+<br/>
+<table><thead><tr><th>Константа / класс</th><th>Значение</th><th>Описание</th></tr></thead><tbody><tr><td>`PADDING_TOP`</td><td>**16px**</td><td>Отступ сверху контента</td></tr><tr><td>`CARD_GAP`</td><td>**4px**</td><td>Расстояние между карточками</td></tr><tr><td>`PEEK_PX`</td><td>**88px**</td><td>Высота видимой полоски предыдущей карточки в стаке</td></tr><tr><td>`bottomPadding`</td><td>вычисляется (min 120px)</td><td>Нижний отступ контента</td></tr><tr><td>`bottom-2`</td><td>**8px**</td><td>Отступ индикатора снизу</td></tr><tr><td>`px-4 py-4` (header)</td><td>**16px** по горизонтали и вертикали</td><td>Отступы шапки</td></tr></tbody></table>
+<br/>
+<h3>Шапка (MobileHeader)</h3>
+<br/>
+<table><thead><tr><th>Класс / стиль</th><th>Значение</th></tr></thead><tbody><tr><td>`px-4 py-4`</td><td>16px слева/справа, 16px сверху/снизу</td></tr><tr><td>Кнопки назад/меню</td><td>40×40px (`w-10 h-10`)</td></tr><tr><td>Иконки в кнопках</td><td>28×28px (ChevronLeft), 24×24px (MoreVertical)</td></tr></tbody></table>
+<br/>
+<h3>Карточка документа (DocumentCard)</h3>
+<br/>
+<table><thead><tr><th>Класс / стиль</th><th>Значение</th></tr></thead><tbody><tr><td>`p-6`</td><td>**24px** внутренний отступ со всех сторон</td></tr><tr><td>`mb-2` (под заголовком)</td><td>**8px** отступ между заголовком и номером</td></tr><tr><td>Иконка: отступ от краёв</td><td>right: **15px**, bottom: **15px** (подложка); right: **31px**, bottom: **31px** (круг иконки)</td></tr></tbody></table>
+<br/>
+<h3>Страница документа (DocumentDetailPage)</h3>
+<br/>
+<table><thead><tr><th>Элемент</th><th>Значение</th></tr></thead><tbody><tr><td>Padding канваса</td><td>**8px 12px** (top/bottom 8px, left/right 12px)</td></tr><tr><td>Высота карточки/канваса</td><td>**400px**</td></tr><tr><td>Скругление области документа</td><td>**0.75rem** (12px)</td></tr></tbody></table>
+<br/>
+<h3>Мокап (MockupFrame)</h3>
+<br/>
+<table><thead><tr><th>Параметр</th><th>Значение</th></tr></thead><tbody><tr><td>Ширина viewport контента</td><td>**412px**</td></tr><tr><td>Скругление экрана в мокапе</td><td>**24px**</td></tr><tr><td>Скругление рамки мокапа (Bezel)</td><td>**48px** (rounded-[48px])</td></tr><tr><td>Размер контейнера мокапа</td><td>min(380px, 100vw, calc(100vh * 390 / 844)), aspect-ratio 390/844</td></tr></tbody></table>
+<br/>
+<hr/>
+<br/>
+<h2>Карточки</h2>
+<br/>
+<h3>Карточка документа (список)</h3>
+<br/>
+<table><thead><tr><th>Параметр</th><th>Значение</th></tr></thead><tbody><tr><td>Минимальная высота</td><td>**160px** (`CARD_HEIGHT`, minHeight)</td></tr><tr><td>Скругление</td><td>**24px** (rounded-[24px])</td></tr><tr><td>Тень</td><td>shadow-lg</td></tr><tr><td>Подложка под иконку</td><td>**112×112px**, круг</td></tr><tr><td>Круг иконки (стекло)</td><td>**80×80px** (w-20 h-20)</td></tr><tr><td>Иконки документов</td><td>**40×40px** (w-10 h-10)</td></tr></tbody></table>
+<br/>
+<h3>Границы документа (водяные знаки, DocumentDetailPage)</h3>
+<br/>
+<table><thead><tr><th>Класс / стиль</th><th>Значение</th></tr></thead><tbody><tr><td>`.document-bounds`</td><td>height **400px**</td></tr><tr><td>`.document-bounds-inner`</td><td>height 300px, aspect-ratio **1.586**, border-radius **0.75rem** (12px)</td></tr><tr><td>Ширина контента (max)</td><td>**412px** (DocumentListPage style)</td></tr></tbody></table>
+<br/>
+<hr/>
+<br/>
+<h2>Статус-бар</h2>
+<br/>
+<table><thead><tr><th>Параметр</th><th>Значение</th></tr></thead><tbody><tr><td>Высота области</td><td>**44px**</td></tr><tr><td>Макс. ширина</td><td>**412px**</td></tr><tr><td>Макс. высота изображения</td><td>**54px**</td></tr></tbody></table>
+<br/>
+<hr/>
+<br/>
+<h2>Мелкие элементы</h2>
+<br/>
+<table><thead><tr><th>Элемент</th><th>Размер</th></tr></thead><tbody><tr><td>Индикатор внизу списка (полоска)</td><td>**128×4px** (w-32 h-1), rounded-full</td></tr><tr><td>Скругление кнопок в хедере</td><td>**8px** (rounded-lg)</td></tr></tbody></table>
+<br/>
+<hr/>
+<br/>
+<h2>Итоговая таблица (ключевые числа)</h2>
+<br/>
+<table><thead><tr><th>Категория</th><th>Значения в px</th></tr></thead><tbody><tr><td>**Шрифты**</td><td>17, 18, 16 (основной текст)</td></tr><tr><td>**Отступы страницы**</td><td>16 (padding top), 4 (между карточками), 8 (индикатор снизу)</td></tr><tr><td>**Отступы карточки**</td><td>24 (p-6), 8 (между заголовком и номером)</td></tr><tr><td>**Карточка**</td><td>высота 160, скругление 24, иконка 40×40, круг 80×80, подложка 112×112</td></tr><tr><td>**Шапка**</td><td>padding 16, кнопки 40×40</td></tr><tr><td>**Документ (деталь)**</td><td>высота 400, padding канваса 8/12, скругление 12</td></tr><tr><td>**Мокап**</td><td>viewport 412px, скругление экрана 24, рамки 48</td></tr><tr><td>**Статус-бар**</td><td>высота 44, ширина до 412</td></tr></tbody></table>
+<br/>
+</body>
+</html>

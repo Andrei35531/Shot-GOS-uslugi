@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
 export default defineConfig({
   publicDir: 'Public',
@@ -9,8 +10,7 @@ export default defineConfig({
     include: ['@appletosolutions/reactbits'],
   },
   plugins: [
-    // The React and Tailwind plugins are both required for Make, even if
-    // Tailwind is not being actively used – do not remove them
+    basicSsl(), // HTTPS — нужен для запроса датчика на iPhone (Safari)
     react(),
     tailwindcss(),
   ],
@@ -23,4 +23,10 @@ export default defineConfig({
 
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
+
+  server: {
+    host: '0.0.0.0', // доступ с iPhone в той же Wi‑Fi сети
+    port: 5173,
+    strictPort: false,
+  },
 })

@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef, type CSSProperties } from 'react';
 import { motion } from 'motion/react';
 import { cn } from './ui/utils';
+import { IPHONE_17_AIR_VIEWPORT_WIDTH } from '../constants/viewport';
 
-const MOBILE_BREAKPOINT = 412;
+const MOBILE_BREAKPOINT = IPHONE_17_AIR_VIEWPORT_WIDTH;
 
 interface LightRaysProps extends React.HTMLAttributes<HTMLDivElement> {
   ref?: React.Ref<HTMLDivElement>;
